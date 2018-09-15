@@ -1,0 +1,20 @@
+{
+  "expo": {
+      "name": "MapView",
+      "version": "1.0.0",
+      "sdkVersion": "30.0.0",
+      "icon": "./assets/app1.png",
+      "android": {
+            "package": "com.ehsan.mapview",
+            "permissions": [
+              "ACCESS_COARSE_LOCATION",
+              "ACCESS_FINE_LOCATION"
+            ],
+            "config":{
+              "googleMaps": {
+                "apiKey": "AIzaSyBUxhuQPBmza3Hhx0_VoUdL37S2GtXMcws"
+              }
+        }
+      }
+  }
+}

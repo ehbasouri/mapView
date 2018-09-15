@@ -23,6 +23,7 @@ class LocationBtn extends Component {
 
 const styles={
     buttonStyle :{
+        width:100,
         paddingLeft:5,
         paddingRight:5,
         alignItems:'center',

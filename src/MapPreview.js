@@ -1,39 +1,31 @@
 import React, { Component } from 'react';
 import {MapView,Constants, Location, Permissions} from 'expo';
-import {View,Image,Platform,TouchableOpacity} from 'react-native';
+import {View,Image,Text,Platform,Dimensions,TouchableOpacity} from 'react-native';
 import LocationBtn from './LocationBtn';
-import GpsIcon from './gps.png';
+import GpsIcon from '../assets/gps.png' ;
+import Header from './Header';
+import I18n from '../i18n';
+import LangoageBtn from './LanguageBtn';
+import Locations from './Locations'
+
+const languages = [
+    {lang:"English",code:"en"},
+    {lang:"Persian",code:"per"}
+]
 
 class MapPreview extends Component {
     constructor(){
         super()
         this.state={
+            value:false,
             Region :null,
-            location_01:{
-              latitude:32.7325015,
-              longitude:51.6885883,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121
-            },
-            location_02:{
-              latitude:35.6541867,
-              longitude:51.4226364,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121
-            },
-            location_03:{
-              latitude:36.8360023,
-              longitude:54.440441,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121
-            },
-            location_04:{
-              latitude:38.0829172,
-              longitude:46.3027029,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121
-            }
+            location_01:Locations.location_01,
+            location_02:Locations.location_02,
+            location_03:Locations.location_03,
+            location_04:Locations.location_04,
+            showLanguageMenu:false
           }
+
         this.Region; 
     }
     componentWillMount() {
@@ -62,6 +54,10 @@ class MapPreview extends Component {
         this._Map.animateToRegion(location,2000)
         }
       }
+      onChangeLanguage=(language)=>{
+          this.setState({showLanguageMenu:false})
+          I18n.locale=language;
+      }
       changeMyLocation=(e)=>{
         var long= e.nativeEvent.coordinate.longitude;
         var lat = e.nativeEvent.coordinate.latitude;
@@ -73,9 +69,40 @@ class MapPreview extends Component {
         }
         this.Region=mylocation
       }
+      renderLangMenu=()=>{
+          if (this.state.showLanguageMenu) {
+            return (
+                <View 
+                  style={{
+                      position:"absolute",
+                      zIndex:10,
+                      height:SCREEN_HEIGHT,
+                      width:SCREEN_WIDTH,
+                      backgroundColor:"rgba(0,0,0,0.7)",
+                      alignItems:"center",
+                      justifyContent:'center'
+                  }}
+                >
+                {
+                    languages.map((language,i)=>
+                      <Text
+                          onPress={()=>this.onChangeLanguage(language.code)}
+                          style={{color:"#fff",fontSize:30,marginTop:10,borderBottomColor:"#fff",borderBottomWidth:1}} 
+                          key={i} >
+                          {language.lang}
+                      </Text>
+                  )
+                }
+                </View>
+                )
+          }
+      }
     render() {
         return (
             <View style={{flex:1}} >
+                <Header>
+                    {I18n.t("Map")}
+                </Header>
                 <MapView
                     style={{ flex: 1 }}
                     initialRegion={null}
@@ -85,26 +112,26 @@ class MapPreview extends Component {
                     ref={Map=>{this._Map = Map}}
                 >
                 <MapView.Marker
-                coordinate={this.state.location_01}
-                title="location_01"
+                    coordinate={this.state.location_01}
+                    title={I18n.t("Isfahan")}
                 />
                 <MapView.Marker
                     coordinate={this.state.location_02}
-                    title="location_02"
+                    title={I18n.t("Tehran")}
                 />
                 <MapView.Marker
                     coordinate={this.state.location_03}
-                    title="location_03"
+                    title={I18n.t("Gorgan")}
                 />
                 <MapView.Marker
                     coordinate={this.state.location_04}
-                    title="location_04"
+                    title={I18n.t("Tabriz")}
                 />
                 </MapView>
                 <TouchableOpacity 
                 onPress={()=>this.animate(this.Region)}
                 style={{
-                    bottom:30,
+                    bottom:70,
                     right:30,
                     height:30,
                     width:30,
@@ -122,34 +149,42 @@ class MapPreview extends Component {
                 <LocationBtn
                 onPress={()=>this.animate(this.state.location_01)}
                 style={{
-                    bottom:10
+                    bottom:70
                 }}
-                title="location_01"
+                title={I18n.t("Isfahan")}
                 />
                 <LocationBtn
                 onPress={()=>this.animate(this.state.location_02)}
                 style={{
-                    bottom:50
-                }}
-                title="location_02"
+                    bottom:105
+                }} 
+                title={I18n.t("Tehran")}
                 />
                 <LocationBtn
                 onPress={()=>this.animate(this.state.location_03)}
                 style={{
-                    bottom:90
+                    bottom:140
                 }}
-                title="location_03"
+                title={I18n.t("Gorgan")}
                 />
                 <LocationBtn
                 onPress={()=>this.animate(this.state.location_04)}
                 style={{
-                    bottom:130
+                    bottom:175
                 }}
-                title="location_04"
+                title={I18n.t("Tabriz")}
                 />
+                <LangoageBtn
+                    onPress={()=>this.setState({showLanguageMenu:true})}
+                    title={I18n.t("Change_Language")}
+                />
+                {this.renderLangMenu()}
             </View>
         );
     }
 }
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default MapPreview;

@@ -10,7 +10,7 @@ import Locations from './Locations'
 
 const languages = [
     {lang:"English",code:"en"},
-    {lang:"Persian",code:"per"}
+    {lang:"فارسی",code:"per"}
 ]
 
 class MapPreview extends Component {
@@ -93,6 +93,11 @@ class MapPreview extends Component {
                       </Text>
                   )
                 }
+                <TouchableOpacity
+                 onPress={()=>this.setState({showLanguageMenu:false})}
+                >
+                <Text style={{color:"#fff",marginTop:40,fontSize:20}} >{I18n.t("Cancel")}</Text>
+                </TouchableOpacity>
                 </View>
                 )
           }
